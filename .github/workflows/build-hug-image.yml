@@ -25,16 +25,12 @@ jobs:
         with:
           ref: hug 
 
-      # ===== 新增步骤开始 =====
       # 这个步骤用于将组织名/用户名转换为小写
       - name: Prepare lower-case repository owner
-        id: prepare-owner # 为这个步骤设置一个ID，以便后续步骤可以引用它的输出
+        id: prepare-owner
         run: |
-          # 使用 'tr' 命令将 github.repository_owner 的值转换为小写
-          # 并将结果写入到 $GITHUB_OUTPUT 文件中，作为步骤的输出变量
           REPO_OWNER_LOWER=$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')
           echo "REPO_OWNER_LOWER=$REPO_OWNER_LOWER" >> $GITHUB_OUTPUT
-      # ===== 新增步骤结束 =====
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -52,11 +48,11 @@ jobs:
           context: .
           push: true
           tags: |
-            # 引用上一个步骤的输出变量
-            ghcr.io/${{ steps.prepare-owner.outputs.REPO_OWNER_LOWER }}/huggingws:latest
+            # 关键：使用上一步生成的小写组织名，并更新镜像名为 'ws'
+            ghcr.io/${{ steps.prepare-owner.outputs.REPO_OWNER_LOWER }}/ws:latest
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
-            org.opencontainers.image.description=http server
+            org.opencontainers.image.description=HTTP Server
             org.opencontainers.image.licenses=MIT
           cache-from: type=gha
           cache-to: type=gha,mode=max
