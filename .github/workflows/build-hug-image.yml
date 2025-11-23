@@ -25,7 +25,6 @@ jobs:
         with:
           ref: hug 
 
-      # 这个步骤用于将组织名/用户名转换为小写
       - name: Prepare lower-case repository owner
         id: prepare-owner
         run: |
@@ -48,7 +47,7 @@ jobs:
           context: .
           push: true
           tags: |
-            # 关键：使用上一步生成的小写组织名，并更新镜像名为 'ws'
+            # 删除了注释行，只保留标签本身
             ghcr.io/${{ steps.prepare-owner.outputs.REPO_OWNER_LOWER }}/ws:latest
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
