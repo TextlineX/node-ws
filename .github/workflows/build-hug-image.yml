@@ -46,9 +46,8 @@ jobs:
         with:
           context: .
           push: true
-          tags: |
-            # 删除了注释行，只保留标签本身
-            ghcr.io/${{ steps.prepare-owner.outputs.REPO_OWNER_LOWER }}/ws:latest
+          # 使用单行格式，确保只有这一个标签被传递
+          tags: ghcr.io/${{ steps.prepare-owner.outputs.REPO_OWNER_LOWER }}/ws:latest
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.description=HTTP Server
